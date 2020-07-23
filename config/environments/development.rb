@@ -11,6 +11,9 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
+  #api
+  #スポンスの形式を保ったままデバッグ情報を表示
+  #config.debug_exception_response_format = :api
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
