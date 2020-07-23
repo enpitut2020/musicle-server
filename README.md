@@ -1,24 +1,25 @@
-# README
+# musicle-server
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Init
 
-Things you may want to cover:
+1. Install Docker Compose
+   https://docs.docker.com/compose/install/
 
-* Ruby version
+2. `$ docker-compose build`
+3. `$ docker-compose run web rake db:create`
+4. `$ docker-compose run web rails db:migrate RAILS_ENV=development`
 
-* System dependencies
+## Start
 
-* Configuration
+`$ docker-compose up`
 
-* Database creation
+## End
 
-* Database initialization
+`$ docker-compose down`
 
-* How to run the test suite
+## Deploy
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+1. `$ heroku container:login`
+2. `$ heroku container:push web`
+3. `$ heroku container:release web`
+4. `$ heroku run bundle exec rails db:migrate`
