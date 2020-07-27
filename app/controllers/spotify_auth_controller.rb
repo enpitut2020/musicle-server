@@ -11,8 +11,9 @@ class SpotifyAuthController < ApplicationController
         http.request(request)
     end
     puts response 
-    render json: get_me(JSON.parse(response.body)["access_token"])
-
+    me = get_me(JSON.parse(response.body)["access_token"])
+    user = set_data(me["id"])
+    render json: {id: user.id}
   end
     
   def get_me(access_token)
@@ -28,7 +29,11 @@ class SpotifyAuthController < ApplicationController
       http.request(request)
     end
     # response.code
-    return response.body
+    return JSON.parse(response.body)
+  end
+
+  def set_data(userid)  #if処理
+    return User.where(spotify_id: userid).first_or_create
   end
 
   def music
