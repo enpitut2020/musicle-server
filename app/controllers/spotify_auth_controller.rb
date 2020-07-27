@@ -11,11 +11,31 @@ class SpotifyAuthController < ApplicationController
         http.request(request)
     end
     puts response 
-    render json: response.body
+    render json: get_me(JSON.parse(response.body)["access_token"])
+
+  end
+    
+  def get_me(access_token)
+    uri = URI.parse("https://api.spotify.com/v1/me")
+    request = Net::HTTP::Get.new(uri)
+    request["Authorization"] = "Bearer " + access_token
+
+    req_options = {
+      use_ssl: uri.scheme == "https",
+    }
+
+    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+      http.request(request)
+    end
+    # response.code
+    return response.body
+  end
+
+  def music
     #曲情報を返す
     uri1 = URI.parse("https://api.spotify.com/v1/me/top/tracks")
     request1 = Net::HTTP::Get.new(uri1)
-    request1["Authorization"] = "Bearer " + JSON.parse(response.body)[:access_token]
+    request1["Authorization"] = "Bearer " + JSON.parse(response.body)["access_token"]
     req_options1 = {
       use_ssl: uri.scheme == "https",
     }
@@ -24,4 +44,5 @@ class SpotifyAuthController < ApplicationController
     end
     render json: response1.body
   end
+
 end
