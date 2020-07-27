@@ -14,7 +14,13 @@ class SpotifyAuthController < ApplicationController
     end
     puts response 
     me = get_me(JSON.parse(response.body)["access_token"])
+
     user = set_data(me["id"])
+    songname = song(JSON.parse(response.body)["access_token"])
+    puts songname
+    puts songname["items"]
+    song_data(songname["items"], user.id)
+
     token = gen_token(user.id)
     render json: { token: token }
   end
@@ -45,18 +51,38 @@ class SpotifyAuthController < ApplicationController
     return User.where(spotify_id: userid).first_or_create
   end
 
-  def music
+  def song(access2)
     #曲情報を返す
     uri1 = URI.parse("https://api.spotify.com/v1/me/top/tracks")
     request1 = Net::HTTP::Get.new(uri1)
-    request1["Authorization"] = "Bearer " + JSON.parse(response.body)["access_token"]
+    request1["Authorization"] = "Bearer " + access2
     req_options1 = {
-      use_ssl: uri.scheme == "https",
+      use_ssl: uri1.scheme == "https",
     }
-    response1 = Net::HTTP.start(uri1.hostname, uri1.port, req_options) do |http|
+    response1 = Net::HTTP.start(uri1.hostname, uri1.port, req_options1) do |http|
       http.request(request1)
     end
-    render json: response1.body
+    return JSON.parse(response1.body)
+  end
+
+  def song_data(item, u_id)
+    num = 1
+    item.map do |param|
+      song = UserSong.where(spotify_id: param["id"]).first_or_create do |song| 
+        song.song_name = param["name"]
+        song.artist_name =  param["artists"].map{ |artist| artist.name}.join(', ').strip
+      end
+
+
+      rank = UserSongRank.find_or_create_by(
+        user_id: u_id,
+        rank_num: num,
+      )
+      if rank.new_record? 
+        UserSongRank.update(rank.id, song_id: song.id)
+      end
+      num += 1
+    end
   end
 
 end

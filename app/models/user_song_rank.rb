@@ -1,0 +1,2 @@
+class UserSongRank < ApplicationRecord
+end
