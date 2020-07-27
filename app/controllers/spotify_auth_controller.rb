@@ -1,3 +1,5 @@
+require 'jwt'
+
 class SpotifyAuthController < ApplicationController
   def auth
     uri = URI.parse("https://accounts.spotify.com/api/token")
@@ -13,9 +15,16 @@ class SpotifyAuthController < ApplicationController
     puts response 
     me = get_me(JSON.parse(response.body)["access_token"])
     user = set_data(me["id"])
-    render json: {id: user.id}
+    token = gen_token(user.id)
+    render json: { token: token }
   end
-    
+
+  def gen_token(user_id)
+    hmac_secret = Rails.application.credentials.secret_key_base
+    payload = { user_id: user_id }
+    return JWT.encode payload, hmac_secret, 'HS256'
+  end
+ 
   def get_me(access_token)
     uri = URI.parse("https://api.spotify.com/v1/me")
     request = Net::HTTP::Get.new(uri)
