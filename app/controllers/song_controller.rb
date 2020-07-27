@@ -1,6 +1,5 @@
 class SongController < ApplicationController
     def song_list
-        @songs = Song.all
-        render json:@songs
+        render json: UserSongRank.where(user_id: params[:uid])
     end
 end
