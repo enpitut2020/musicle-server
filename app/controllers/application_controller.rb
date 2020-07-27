@@ -5,6 +5,7 @@ class ApplicationController < ActionController::API
     def hello
         #render html: "hello, world!"
         #messageでparamsの引数を受け取る
+        #アーティスト情報spotifyから
         #@song = Song.all
         #render json: @song
         uri = URI.parse("https://api.spotify.com/v1/artists/1O8CSXsPwEqxcoBE360PPO")
