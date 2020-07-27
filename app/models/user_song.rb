@@ -1,0 +1,2 @@
+class UserSong < ApplicationRecord
+end
