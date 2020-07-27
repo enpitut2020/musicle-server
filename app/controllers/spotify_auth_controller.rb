@@ -5,7 +5,7 @@ class SpotifyAuthController < ApplicationController
     uri = URI.parse("https://accounts.spotify.com/api/token")
     request = Net::HTTP::Post.new(uri)
     request["Authorization"] = "Basic " + Rails.application.credentials.spotify[:authorization_key]
-    request.set_form_data({'grant_type' => 'authorization_code', 'code' => params[:code], 'redirect_uri' => 'http://localhost:8080/spotify-callback'})
+    request.set_form_data({'grant_type' => 'authorization_code', 'code' => params[:code], 'redirect_uri' => 'https://musicle-app.web.app/spotify-callback'})
     req_options = {
       use_ssl: true,
     }
@@ -70,7 +70,7 @@ class SpotifyAuthController < ApplicationController
     item.map do |param|
       song = UserSong.where(spotify_id: param["id"]).first_or_create do |song| 
         song.song_name = param["name"]
-        song.artist_name =  param["artists"].map{ |artist| artist.name}.join(', ').strip
+        song.artist_name =  param["artists"].map{ |artist| artist["name"]}.join(', ').strip
       end
 
 
@@ -78,7 +78,7 @@ class SpotifyAuthController < ApplicationController
         user_id: u_id,
         rank_num: num,
       )
-      if rank.new_record? 
+      if !rank.new_record? 
         UserSongRank.update(rank.id, song_id: song.id)
       end
       num += 1
