@@ -5,7 +5,7 @@ class SpotifyAuthController < ApplicationController
     uri = URI.parse("https://accounts.spotify.com/api/token")
     request = Net::HTTP::Post.new(uri)
     request["Authorization"] = "Basic " + Rails.application.credentials.spotify[:authorization_key]
-    request.set_form_data({'grant_type' => 'authorization_code', 'code' => params[:code], 'redirect_uri' => 'https://musicle-app.web.app/spotify-callback'})
+    request.set_form_data({'grant_type' => 'authorization_code', 'code' => params[:code], 'redirect_uri' => params["redirect_uri"]})
     req_options = {
       use_ssl: true,
     }
@@ -22,7 +22,7 @@ class SpotifyAuthController < ApplicationController
     song_data(songname["items"], user.id)
 
     token = gen_token(user.id)
-    render json: { token: token }
+    render json: { token: token, uid: user.id }
   end
 
   def gen_token(user_id)
