@@ -48,9 +48,9 @@ class SpotifyAuthController < ApplicationController
   end
 
   def set_data(userid, display)  #if処理
-    return User.where(spotify_id: userid).first_or_create do |userset| 
-      userset.display_name = display
-    end
+    user =  User.find_or_initialize_by(spotify_id: userid)
+    user.update!(display_name: display)
+    return user
   end
 
   def song(access2)
