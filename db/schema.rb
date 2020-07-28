@@ -12,18 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2020_07_28_003159) do
 
-  create_table "songs", force: :cascade do |t|
-    t.integer "rank_num"
-    t.string "song_name"
-    t.string "artist_name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "user_song_ranks", force: :cascade do |t|
     t.integer "user_id"
     t.integer "rank_num"
-    t.integer "song_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_song_id"
