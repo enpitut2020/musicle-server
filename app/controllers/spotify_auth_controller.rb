@@ -17,8 +17,8 @@ class SpotifyAuthController < ApplicationController
 
     user = set_data(me["id"])
     songname = song(JSON.parse(response.body)["access_token"])
-    puts songname
-    puts songname["items"]
+    #puts songname
+    #puts songname["items"]
     song_data(songname["items"], user.id)
 
     token = gen_token(user.id)
@@ -79,7 +79,7 @@ class SpotifyAuthController < ApplicationController
         rank_num: num,
       )
       if !rank.new_record? 
-        UserSongRank.update(rank.id, song_id: song.id)
+        UserSongRank.update(rank.id, user_song_id: song.id)
       end
       num += 1
     end
