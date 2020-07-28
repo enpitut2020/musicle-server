@@ -74,13 +74,11 @@ class SpotifyAuthController < ApplicationController
       end
 
 
-      rank = UserSongRank.find_or_create_by(
+      rank = UserSongRank.find_or_initialize_by(
         user_id: u_id,
         rank_num: num,
       )
-      if !rank.new_record? 
-        UserSongRank.update(rank.id, user_song_id: song.id)
-      end
+      rank.update!(user_song_id: song.id)
       num += 1
     end
   end
