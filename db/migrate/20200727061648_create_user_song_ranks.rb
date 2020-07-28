@@ -1,11 +1,5 @@
 class CreateUserSongRanks < ActiveRecord::Migration[6.0]
   def change
-    create_table :user_song_ranks do |t|
-      t.integer :user_id
-      t.integer :rank_num
-      t.integer :song_id
-
-      t.timestamps
-    end
+    rename_column :user_song_ranks, :song_id, :user_song_id
   end
 end

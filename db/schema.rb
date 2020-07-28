@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_27_061648) do
+ActiveRecord::Schema.define(version: 2020_07_28_003159) do
 
   create_table "songs", force: :cascade do |t|
     t.integer "rank_num"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2020_07_27_061648) do
     t.integer "song_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_song_id"
+    t.index ["user_song_id"], name: "index_user_song_ranks_on_user_song_id"
   end
 
   create_table "user_songs", force: :cascade do |t|
@@ -37,7 +39,6 @@ ActiveRecord::Schema.define(version: 2020_07_27_061648) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "spotify_id"

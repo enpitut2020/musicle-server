@@ -1,17 +1,8 @@
 class UsersController < ApplicationController
-
-  #曲情報を返す
-  def song
-    uri1 = URI.parse("https://api.spotify.com/v1/me/top/tracks")
-    request1 = Net::HTTP::Get.new(uri1)
-    request1["Authorization"] = "Bearer " + JSON.parse(response.body)["access_token"]
-    req_options1 = {
-      use_ssl: uri.scheme == "https",
-    }
-    response1 = Net::HTTP.start(uri1.hostname, uri1.port, req_options) do |http|
-      http.request(request1)
-    end
-    render json: response1.body
+  def search
+    #songs = UserSongRank.where(user_id: params[:id]).includes(:user_song)
+    ranks = UserSongRank.order(:rank_num).limit(5).where(user_id: params[:id]).includes(:user_song)
+    songs_data = ranks.map {|rank| {name: rank.user_song.song_name, artistName: rank.user_song.artist_name} }
+    render json: songs_data
   end
-
 end
