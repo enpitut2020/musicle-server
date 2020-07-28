@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_050918) do
     t.string "spotify_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "display_name"
   end
 
 end
